@@ -16,6 +16,7 @@ jobs:
           REFRESH_TOKENS: ${{ secrets.REFRESH_TOKENS }}
           GP_TOKEN: ${{ secrets.GP_TOKEN}}
           PUSH_TYPES: 'TELEGRAM'
+          # DO_NOT_REWARD: 'false'
           # SERVERCHAN_SEND_KEY: ${{ secrets.SERVERCHAN_SEND_KEY }} # [可选] Server酱推送渠道的 SendKey
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} # [可选] Telegram Bot Token
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }} # [可选] Telegram 接收推送消息的会话 ID
