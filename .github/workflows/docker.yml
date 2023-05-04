@@ -1,0 +1,61 @@
+name: '源码构建Docker镜像'
+
+on:
+  push: # push 时触发, 主要是为了测试配置有没有问题
+  schedule:
+    - cron: '0 0 */6 * * ?' 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: docker_hub
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - userName: QiuChenly
+            repoName: QQFlacMusicDownloader
+            dockerImageName: qq_flac_music_downloader
+            branchName: main
+    steps:
+      - name: Check commit
+        run: |
+          commit=$(curl -sL $upStream/commits/${{ matrix.branchName }} |grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
+          lastCommit=$(grep "${{ matrix.userName }}\/${{ matrix.repoName }}" ${{ github.workspace }}/README.md |grep -o '[a-z0-9]\{40\}')
+          if [ $commit != $lastCommit ] || [ "${{ inputs.rebuild }}" == "true" ]; then
+            echo "commit=$commit" >> $GITHUB_ENV
+            echo "commitS=${commit:0:7}" >> $GITHUB_ENV
+          fi
+      - name: Log in to Docker Hub
+        if: ${{ env.commit }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Checkout Source Code
+        if: ${{ env.commit }}
+        shell: bash
+        run: |
+          git clone https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}.git ${{ matrix.repoName }}
+          cd ${{ matrix.repoName }}
+          wget -O .dockerignore https://github.com/Carlos920/Actions/blob/${{ matrix.userName }}/${{ matrix.repoName }}/docker/.dockerignore?raw=true
+          wget -O Dockerfile https://github.com/Carlos920/Actions/blob/${{ matrix.userName }}/${{ matrix.repoName }}/docker/Dockerfile?raw=true
+      - name: Build and push Docker images latest
+        if: ${{ env.commit }}
+        working-directory: ${{ matrix.repoName }}
+        run: |
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest
+      - name: Commit Tag
+        if: ${{ env.commit }}
+        run: |
+          rm -rf ${{ matrix.repoName }}
+          sed -i '/url =/d' ./.git/config
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "32257015+github-actions[bot]@users.noreply.github.com"
+          git remote set-url --add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git pull --rebase origin docker
+          sed -i "/${{ matrix.userName }}\/${{ matrix.repoName }}/s#Updated: [a-zA-Z0-9]*#Updated: ${{ env.commit }}#" README.md
+          git add --all
+          git commit -m "${{ env.commit }}"
+          git push -u origin docker
