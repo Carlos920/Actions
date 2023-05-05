@@ -8,7 +8,7 @@ on:
     inputs:
       rebuild:
         description: '忽略构建记录以重新构建'
-        required: true
+        required: false
         type: boolean
 
 jobs:
