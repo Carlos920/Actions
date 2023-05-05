@@ -23,6 +23,7 @@ RUN apk add --no-cache gcc g++ && \
         apk del gcc g++ && \
         apk cache clean
 
+
 EXPOSE 8899
 
 CMD ["python3", "MainServer.py"]
