@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-alpine
 
 LABEL name="QQFlacMusicDownloader"
 
@@ -16,7 +16,12 @@ ADD ./ /workspace
 
 # RUN pip3 install --no-cache-dir --upgrade pip  -i https://mirrors.bfsu.edu.cn/pypi/web/simple && pip3 install --no-cache-dir -r /workspace/requirements.txt -i https://mirrors.bfsu.edu.cn/pypi/web/simple
 
-RUN pip3 install --no-cache-dir --upgrade pip && pip3 install --no-cache-dir -r /workspace/requirements.txt
+RUN apk add --no-cache gcc g++ && \
+        pip3 install --no-cache-dir --upgrade pip && \
+        pip3 install --no-cache-dir -r /workspace/requirements.txt && \
+        echo "==> Clean UP..."  && \
+        apk del python3-pip gcc g++ && \
+        apk cache clean
 
 EXPOSE 8899
 
