@@ -42,10 +42,10 @@ jobs:
           echo "commit=$commit"
           echo "lastCommit=$lastCommit"
           echo "$commit" != "$lastCommit"
-          if [ "$commit" != "$lastCommit" ] || [ "${{ inputs.rebuild }}" == "true" ]; then
+          # if [ "$commit" != "$lastCommit" ] || [ "${{ inputs.rebuild }}" == "true" ]; then
             echo "commit=$commit" >> $GITHUB_ENV
             echo "commitS=${commit:0:7}" >> $GITHUB_ENV
-          fi
+          # fi
       - name: Set up QEMU
         if: ${{ env.commit }}
         uses: docker/setup-qemu-action@v2
