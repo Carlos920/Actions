@@ -18,9 +18,14 @@ jobs:
             dockerImageName: qq_flac_music_downloader
             branchName: main
     steps:
-      - name: Check commit
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Check New Commit
         run: |
           commit=$(curl -sL $upStream/commits/${{ matrix.branchName }} |grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
+          wget -O ./${{ github.workspace }}/README.md https://github.com/Carlos920/Actions/blob/docker/README.md?raw=true
           lastCommit=$(grep "${{ matrix.userName }}\/${{ matrix.repoName }}" ${{ github.workspace }}/README.md |grep -o '[a-z0-9]\{40\}')
           if [ $commit != $lastCommit ] || [ "${{ inputs.rebuild }}" == "true" ]; then
             echo "commit=$commit" >> $GITHUB_ENV
