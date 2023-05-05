@@ -1,6 +1,6 @@
 FROM python:3.11-alpine as builder
 
-COPY ./workspace/requirements.txt .
+COPY requirements.txt .
 
 RUN apk add --no-cache gcc g++ && \
         pip3 install --no-cache-dir --upgrade pip && \
