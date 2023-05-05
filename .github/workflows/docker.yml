@@ -53,7 +53,7 @@ jobs:
           sed -i '/url =/d' ./.git/config
           git config --local user.name "github-actions[bot]"
           git config --local user.email "32257015+github-actions[bot]@users.noreply.github.com"
-          git remote set-url --add origin "https://${{ github.actor }}:${{ aliyun_signin.secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git remote set-url --add origin "https://${{ github.actor }}:${{ secrets.GP_TOKEN }}@github.com/${{ github.repository }}"
           git pull --rebase origin docker
           sed -i "/${{ matrix.userName }}\/${{ matrix.repoName }}/s#Updated: [a-zA-Z0-9]*#Updated: ${{ env.commit }}#" README.md
           git add --all
