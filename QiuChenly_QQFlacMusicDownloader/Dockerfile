@@ -7,6 +7,7 @@ RUN apk add --no-cache gcc g++ && \
         pip3 install --no-cache-dir -r requirements.txt
 
 
+
 FROM python:3.11-alpine
 
 LABEL name="QQFlacMusicDownloader"
