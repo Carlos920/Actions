@@ -33,14 +33,11 @@ jobs:
           commit=$(curl -sL https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}/commits/${{ matrix.branchName }} |grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
           wget -O ${{ github.workspace }}/README.md https://github.com/Carlos920/Actions/blob/docker/README.md?raw=true
           lastCommit=$(grep "${{ matrix.userName }}\/${{ matrix.repoName }}" ${{ github.workspace }}/README.md |grep -o '[a-z0-9]\{40\}')
-
-          echo "commit=$commit"
-          echo "lastCommit=$lastCommit"
-          echo "$commit" != "$lastCommit"
-          # if [ "$commit" != "$lastCommit" ] || [ "${{ inputs.rebuild }}" == "true" ]; then
+          if [ "$commit" != "$lastCommit" ] || [ "${{ inputs.rebuild }}" == "true" ]; then
             echo "commit=$commit" >> $GITHUB_ENV
-            echo "commitS=${commit:0:7}" >> $GITHUB_ENV
-          # fi
+            echo "lastCommit=$lastCommit" >> $GITHUB_ENV
+            echo "commit_short=${commit:0:7}" >> $GITHUB_ENV
+          fi
       - name: Set up QEMU
         if: ${{ env.commit }}
         uses: docker/setup-qemu-action@v2
@@ -61,12 +58,6 @@ jobs:
           cd ${{ matrix.repoName }}
           wget -O .dockerignore https://github.com/Carlos920/Actions/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/.dockerignore?raw=true
           wget -O Dockerfile https://github.com/Carlos920/Actions/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/Dockerfile?raw=true
-      # - name: Build and push Docker images latest
-      #   if: ${{ env.commit }}
-      #   working-directory: ${{ matrix.repoName }}
-      #   run: |
-      #     docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest .
-      #     docker push ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest
       - name: Build and push
         id: docker_build
         if: ${{ env.commit }}
@@ -79,13 +70,15 @@ jobs:
       - name: Commit Tag
         if: ${{ env.commit }}
         run: |
-          rm -rf ${{ matrix.repoName }}
-          sed -i '/url =/d' ./.git/config
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "32257015+github-actions[bot]@users.noreply.github.com"
-          git remote set-url --add origin "https://${{ github.actor }}:${{ secrets.GP_TOKEN }}@github.com/${{ github.repository }}"
-          git pull --rebase origin docker
-          sed -i "/${{ matrix.userName }}\/${{ matrix.repoName }}/s#Updated: [a-zA-Z0-9]*#Updated: ${{ env.commit }}#" README.md
-          git add --all
-          git commit -m "${{ env.commit }}"
-          git push -u origin docker
+          if [ "${{ env.commit }}" != "${{ env.lastCommit }}" ]; then
+            rm -rf ${{ matrix.repoName }}
+            sed -i '/url =/d' ./.git/config
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "32257015+github-actions[bot]@users.noreply.github.com"
+            git remote set-url --add origin "https://${{ github.actor }}:${{ secrets.GP_TOKEN }}@github.com/${{ github.repository }}"
+            git pull --rebase origin docker
+            sed -i "/${{ matrix.userName }}\/${{ matrix.repoName }}/s#Updated: [a-zA-Z0-9]*#Updated: ${{ env.commit }}#" README.md
+            git add --all
+            git commit -m "${{ env.commit }}"
+            git push -u origin docker
+          fi
