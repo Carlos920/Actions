@@ -47,8 +47,8 @@ jobs:
         run: |
           git clone https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}.git ${{ matrix.repoName }}
           cd ${{ matrix.repoName }}
-          wget -O .dockerignore https://github.com/Carlos920/Actions/blob/${{ matrix.userName }}/${{ matrix.repoName }}/docker/.dockerignore?raw=true
-          wget -O Dockerfile https://github.com/Carlos920/Actions/blob/${{ matrix.userName }}/${{ matrix.repoName }}/docker/Dockerfile?raw=true
+          wget -O .dockerignore https://github.com/Carlos920/Actions/blob/docker/${{ matrix.userName }}/${{ matrix.repoName }}/.dockerignore?raw=true
+          wget -O Dockerfile https://github.com/Carlos920/Actions/blob/docker/${{ matrix.userName }}/${{ matrix.repoName }}/Dockerfile?raw=true
       - name: Build and push Docker images latest
         if: ${{ env.commit }}
         working-directory: ${{ matrix.repoName }}
