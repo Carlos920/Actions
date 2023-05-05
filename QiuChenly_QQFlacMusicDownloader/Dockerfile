@@ -20,7 +20,7 @@ RUN apk add --no-cache gcc g++ && \
         pip3 install --no-cache-dir --upgrade pip && \
         pip3 install --no-cache-dir -r /workspace/requirements.txt && \
         echo "==> Clean UP..."  && \
-        apk del python3-pip gcc g++ && \
+        apk del gcc g++ && \
         apk cache clean
 
 EXPOSE 8899
