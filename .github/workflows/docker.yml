@@ -1,9 +1,8 @@
 name: '源码构建Docker镜像'
 
 on:
-  push: # push 时触发, 主要是为了测试配置有没有问题
   schedule:
-    - cron: '0 4,16 * * *'
+    - cron: '5 4,10,16 * * *'
   workflow_dispatch:
     inputs:
       rebuild:
