@@ -35,7 +35,7 @@ jobs:
       - name: Check New Commit
         run: |
           commit=$(curl -sL https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}/commits/${{ matrix.branchName }} |grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
-          wget -O ${{ github.workspace }}/README.md https://github.com/Carlos920/Actions/blob/docker/README.md?raw=true
+          wget -O ${{ github.workspace }}/README.md https://github.com/${{ github.repository }}/blob/docker/README.md?raw=true
           lastCommit=$(grep "${{ matrix.userName }}\/${{ matrix.repoName }}" ${{ github.workspace }}/README.md |grep -o '[a-z0-9]\{40\}')
           if [ "$commit" != "$lastCommit" ] || [ "${{ inputs.rebuild }}" == "true" ]; then
             echo "commit=$commit" >> $GITHUB_ENV
@@ -60,8 +60,8 @@ jobs:
         run: |
           git clone https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}.git ${{ matrix.repoName }}
           cd ${{ matrix.repoName }}
-          wget -O .dockerignore https://github.com/Carlos920/Actions/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/.dockerignore?raw=true
-          wget -O Dockerfile https://github.com/Carlos920/Actions/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/Dockerfile?raw=true
+          wget -O .dockerignore https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/.dockerignore?raw=true
+          wget -O Dockerfile https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/Dockerfile?raw=true
       - name: Build and push
         id: docker_build
         if: ${{ env.commit }}
@@ -70,7 +70,7 @@ jobs:
           context: ./${{ matrix.repoName }}
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386,linux/arm/v6,linux/s390x
+          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386
       - name: Commit Tag
         if: ${{ env.commit }}
         run: |
