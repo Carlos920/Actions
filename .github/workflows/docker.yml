@@ -2,10 +2,10 @@ name: '源码构建Docker镜像'
 
 on:
   push:
-    branches:
-      - docker
-    paths-ignore:
-      - '.github/workflows/**'
+    #branches:
+    #  - docker
+    #paths-ignore:
+    #  - '.github/workflows/**'
   schedule:
     - cron: '5 4,10,16 * * *'
   workflow_dispatch:
