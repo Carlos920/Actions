@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - '.github/workflows/**'
   schedule:
-    - cron: 5 4,10,16 * * *
+    - cron: 5 15 * * *
   workflow_dispatch:
     inputs:
       rebuild:
