@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - userName: QiuChenly
+          - userName: QiuChenlyOpenSource
             repoName: QQFlacMusicDownloader
             dockerImageName: qq_flac_music_downloader
             branchName: main
@@ -70,7 +70,9 @@ jobs:
         with:
           context: ./${{ matrix.repoName }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:${{ env.commit_short }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386
       - name: Commit Tag
         if: ${{ env.commit }}
