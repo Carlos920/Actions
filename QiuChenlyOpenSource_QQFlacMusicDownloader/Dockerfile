@@ -9,8 +9,8 @@ RUN        pip3 install --no-cache-dir --upgrade pip && \
 
 
 
-# FROM python:3.9-alpine
-FROM python:3.9-slim-buster
+FROM python:3.9-alpine
+#FROM python:3.9-slim-buster
 
 LABEL name="QQFlacMusicDownloader"
 
