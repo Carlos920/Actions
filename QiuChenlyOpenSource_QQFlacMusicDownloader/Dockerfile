@@ -1,4 +1,4 @@
-FROM python:3.11-alpine as builder
+FROM python:3.9-alpine as builder
 
 COPY requirements.txt .
 
@@ -8,7 +8,7 @@ RUN apk add --no-cache gcc g++ && \
 
 
 
-FROM python:3.11-alpine
+FROM python:3.9-alpine
 
 LABEL name="QQFlacMusicDownloader"
 
