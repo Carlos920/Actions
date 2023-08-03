@@ -1,5 +1,5 @@
 # FROM python:3.9-alpine as builder
-FROM python:3.9-slim-buster as builder
+FROM python:3.9-buster as builder
 
 COPY requirements.txt .
 
@@ -9,7 +9,8 @@ RUN        pip3 install --no-cache-dir --upgrade pip && \
 
 
 
-FROM python:3.9-alpine
+# FROM python:3.9-alpine
+FROM python:3.9-slim-buster
 
 LABEL name="QQFlacMusicDownloader"
 
