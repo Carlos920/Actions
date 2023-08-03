@@ -3,6 +3,8 @@ FROM python:3.9-alpine as builder
 COPY requirements.txt .
 
 RUN apk add --no-cache gcc g++ && \
+    apk add --no-cache libjpeg-dev zlib1g-dev && \
+        pip3 install --no-cache-dir Pillow && \
         pip3 install --no-cache-dir --upgrade pip && \
         pip3 install --no-cache-dir -r requirements.txt
 
