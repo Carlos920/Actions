@@ -1,42 +1,33 @@
-# FROM python:3.9-alpine as builder
-FROM python:3.9-buster as builder
+FROM python:3.11-alpine AS base
 
-COPY requirements.txt .
-
-# RUN apk add --no-cache gcc g++ && \
-RUN        pip3 install --no-cache-dir --upgrade pip && \
-        pip3 install --no-cache-dir -r requirements.txt
+RUN apk add --no-cache gcc g++ jpeg-dev zlib-dev \
+    && rm -rf /var/cache/apk/*
 
 
+FROM base AS dependencies
 
-FROM python:3.9-alpine
-#FROM python:3.9-slim-buster
+WORKDIR /app
+COPY requirements.txt /app/
+
+RUN pip3 install --no-cache-dir --upgrade pip -i https://mirrors.bfsu.edu.cn/pypi/web/simple && \
+    pip3 install --no-cache-dir -r requirements.txt -i https://mirrors.bfsu.edu.cn/pypi/web/simple
+
+
+FROM dependencies AS source 
+
+WORKDIR /app
+COPY ./ /app
+
+
+FROM source AS release 
 
 LABEL name="QQFlacMusicDownloader"
 
 ENV TZ Asia/Shanghai
-
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
-
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
-
-COPY --from=builder /usr/local/bin /usr/local/bin
-COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
-
-WORKDIR /workspace
-
-COPY ./ /workspace
-
-# RUN pip3 install --no-cache-dir --upgrade pip  -i https://mirrors.bfsu.edu.cn/pypi/web/simple && pip3 install --no-cache-dir -r /workspace/requirements.txt -i https://mirrors.bfsu.edu.cn/pypi/web/simple
-
-# RUN apk add --no-cache gcc g++ && \
-#         pip3 install --no-cache-dir --upgrade pip && \
-#         pip3 install --no-cache-dir -r /workspace/requirements.txt && \
-#         echo "==> Clean UP..."  && \
-#         apk del gcc g++
-
 
 EXPOSE 8899
 
