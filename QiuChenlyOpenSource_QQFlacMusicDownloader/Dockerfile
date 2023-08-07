@@ -6,8 +6,8 @@ RUN apk add --no-cache gcc g++ jpeg-dev zlib-dev \
 
 FROM base AS dependencies
 
-WORKDIR /app
-COPY requirements.txt /app/
+WORKDIR /workspace
+COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir --upgrade pip -i https://mirrors.bfsu.edu.cn/pypi/web/simple && \
     pip3 install --no-cache-dir -r requirements.txt -i https://mirrors.bfsu.edu.cn/pypi/web/simple
@@ -15,8 +15,8 @@ RUN pip3 install --no-cache-dir --upgrade pip -i https://mirrors.bfsu.edu.cn/pyp
 
 FROM dependencies AS source 
 
-WORKDIR /app
-COPY ./ /app
+WORKDIR /workspace
+COPY ./ .
 
 
 FROM source AS release 
