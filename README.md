@@ -4,6 +4,6 @@
 <details> 
     <summary>更新内容</summary>
 
-- [QiuChenlyOpenSource/QQFlacMusicDownloader](https://github.com/QiuChenlyOpenSource/QQFlacMusicDownloader) (Updated: b3b84496de59c901ccb6a554ed5d888ef329b576)
+- [QiuChenlyOpenSource/QQFlacMusicDownloader](https://github.com/QiuChenlyOpenSource/QQFlacMusicDownloader) (Updated: 972a78a9522853b237255e9715b34d93c7367dee)
 
 </details>
