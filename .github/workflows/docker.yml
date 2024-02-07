@@ -2,8 +2,8 @@ name: 'Build Docker'
 
 on:
   push:
-    branches:
-      - docker
+    # branches:
+      # - docker
     paths-ignore:
       - '.github/workflows/**'
   schedule:
