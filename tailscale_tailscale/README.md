@@ -1,1 +1,3 @@
-> [fredliang44/derper-docker](https://github.com/fredliang44/derper-docker)
+- [fredliang44/derper-docker](https://github.com/fredliang44/derper-docker)
+- [自定义derper服务-纯ip](https://icloudnative.io/posts/custom-derp-servers)
+- [derper-ip](https://github.com/yangchuansheng/ip_derper)
