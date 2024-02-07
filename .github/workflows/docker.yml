@@ -52,24 +52,24 @@ jobs:
             echo "commit_short=${commit:0:7}" >> $GITHUB_ENV
           fi
       - name: Set up QEMU
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         uses: docker/setup-buildx-action@v2
       - name: Log in to Docker Hub
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Checkout Source Code
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         shell: bash
         run: |
           git clone https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}.git ${{ matrix.repoName }}
       - name: Overwrite Dockerfile
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         working-directory: ${{ matrix.repoName }}
         shell: bash
         run: |
@@ -85,11 +85,11 @@ jobs:
             #wget -O Dockerfile https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/Dockerfile?raw=true
           fi
       - name: List workspace directory
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         run: ls -l ${{ matrix.repoName }} 
       - name: Build and push
         id: docker_build
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         uses: docker/build-push-action@v4
         with:
           context: ./${{ matrix.repoName }}
@@ -99,7 +99,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:${{ env.commit_short }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386
       - name: Commit Tag
-        if: ${{ env.commit }} && ${{ matrix.enable == 'true' }} 
+        if: ${{ env.commit && matrix.enable }} 
         run: |
           if [ "${{ env.commit }}" != "${{ env.lastCommit }}" ]; then
             rm -rf ${{ matrix.repoName }}
