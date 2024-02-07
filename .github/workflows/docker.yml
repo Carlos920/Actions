@@ -53,6 +53,34 @@ jobs:
             echo "lastCommit=$lastCommit" >> $GITHUB_ENV
             echo "commit_short=${commit:0:7}" >> $GITHUB_ENV
           fi
+      - name: Checkout Source Code
+        if: ${{ env.commit && matrix.enable && matrix.gitclone }} 
+        shell: bash
+        run: |
+          git clone https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}.git ${{ matrix.repoName }}
+      - name: Overwrite Dockerfile
+        if: ${{ env.commit && matrix.enable }} 
+        shell: bash
+        run: |
+          if [ ! -d "${{ matrix.repoName }}" ]; then
+            echo "${{ matrix.repoName }} folder does not exist, creating..."
+            mkdir ${{ matrix.repoName }}
+          fi
+          path=${{ matrix.userName }}_${{ matrix.repoName }}
+          if [ -f "$path/.dockerignore" ]; then
+            echo "dockerignore exists"
+            cp $path/.dockerignore ${{ matrix.repoName }}/
+            #wget -O .dockerignore https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/.dockerignore?raw=true
+          fi
+          if [ -f "$path/Dockerfile" ]; then
+            echo "Dockerfile exists"
+            cp $path/Dockerfile ${{ matrix.repoName }}/
+            #wget -O Dockerfile https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/Dockerfile?raw=true
+          fi
+        
+      - name: List workspace directory
+        if: ${{ env.commit && matrix.enable }} 
+        run: ls -l ${{ matrix.repoName }} 
       - name: Set up QEMU
         if: ${{ env.commit && matrix.enable }} 
         uses: docker/setup-qemu-action@v2
@@ -65,30 +93,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - name: Checkout Source Code
-        if: ${{ env.commit && matrix.enable && matrix.gitclone }} 
-        shell: bash
-        run: |
-          git clone https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}.git ${{ matrix.repoName }}
-      - name: Overwrite Dockerfile
-        if: ${{ env.commit && matrix.enable }} 
-        shell: bash
-        run: |
-          path=${{ matrix.userName }}_${{ matrix.repoName }}
-          if [ -f "$path/.dockerignore" ]; then
-            echo "dockerignore exists"
-            cp $path/.dockerignore ${{ matrix.repoName }}/
-            #wget -O .dockerignore https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/.dockerignore?raw=true
-          fi
-          if [ -f "$path/Dockerfile" ]; then
-            echo "Dockerfile exists"
-            cp $path/Dockerfile ${{ matrix.repoName }}/
-            #wget -O Dockerfile https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/Dockerfile?raw=true
-          fi
-        working-directory: ${{ matrix.repoName }}
-      - name: List workspace directory
-        if: ${{ env.commit && matrix.enable }} 
-        run: ls -l ${{ matrix.repoName }} 
       - name: Build and push
         id: docker_build
         if: ${{ env.commit && matrix.enable }} 
