@@ -24,11 +24,13 @@ jobs:
       matrix:
         include:
           - enable: false
+            gitclone: true
             userName: QiuChenlyOpenSource
             repoName: QQFlacMusicDownloader
             dockerImageName: qq_flac_music_downloader
             branchName: main
           - enable: true
+            gitclone: false
             userName: tailscale
             repoName: tailscale
             dockerImageName: derper
@@ -64,26 +66,26 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Checkout Source Code
-        if: ${{ env.commit && matrix.enable }} 
+        if: ${{ env.commit && matrix.enable && matrix.gitclone }} 
         shell: bash
         run: |
           git clone https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}.git ${{ matrix.repoName }}
       - name: Overwrite Dockerfile
         if: ${{ env.commit && matrix.enable }} 
-        working-directory: ${{ matrix.repoName }}
         shell: bash
         run: |
           path=${{ matrix.userName }}_${{ matrix.repoName }}
           if [ -f "$path/.dockerignore" ]; then
             echo "dockerignore exists"
-            cp $path/.dockerignore ./
+            cp $path/.dockerignore ${{ matrix.repoName }}/
             #wget -O .dockerignore https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/.dockerignore?raw=true
           fi
           if [ -f "$path/Dockerfile" ]; then
             echo "Dockerfile exists"
-            cp $path/Dockerfile ./
+            cp $path/Dockerfile ${{ matrix.repoName }}/
             #wget -O Dockerfile https://github.com/${{ github.repository }}/blob/docker/${{ matrix.userName }}_${{ matrix.repoName }}/Dockerfile?raw=true
           fi
+        working-directory: ${{ matrix.repoName }}
       - name: List workspace directory
         if: ${{ env.commit && matrix.enable }} 
         run: ls -l ${{ matrix.repoName }} 
