@@ -1,3 +1,4 @@
 - [fredliang44/derper-docker](https://github.com/fredliang44/derper-docker)
 - [自定义derper服务-纯ip](https://icloudnative.io/posts/custom-derp-servers)
 - [derper-ip](https://github.com/yangchuansheng/ip_derper)
+- [自定义derper服务](https://blog.lamgc.moe/2023/01/30/how-to-deploy-tailscale-derp-server/)
