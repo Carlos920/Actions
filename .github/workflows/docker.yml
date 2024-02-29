@@ -39,7 +39,7 @@ jobs:
             gitclone: true
             userName: vvbbnn00
             repoName: WARP-Clash-API
-            dockerImageName: WARP-Clash-API
+            dockerImageName: warp-clash-api
             branchName: master
     steps:
       - name: Checkout
