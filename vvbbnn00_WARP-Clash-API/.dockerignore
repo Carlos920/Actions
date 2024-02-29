@@ -1,0 +1,12 @@
+.git
+.github
+.env
+.dockerignore
+.gitignore
+.env.local
+Dockerfile
+docker-compose.yaml
+*.md
+LICENSE
+logs/*.log
+account/*.json
