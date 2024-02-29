@@ -17,6 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 FROM python:3.11-alpine AS release 
 
+LABEL name="WARP-Clash-API"
+
 COPY --from=builder-image /usr/local/bin /usr/local/bin
 COPY --from=builder-image /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
@@ -25,6 +27,8 @@ WORKDIR /app
 # Copy the rest of the code
 COPY . .
 RUN chmod +x ./scripts/*.sh
+
+ENV TZ Asia/Shanghai
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
