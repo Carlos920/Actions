@@ -29,18 +29,21 @@ jobs:
             repoName: QQFlacMusicDownloader
             dockerImageName: qq_flac_music_downloader
             branchName: main
+            platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386
           - enable: true
             gitclone: false
             userName: tailscale
             repoName: tailscale
             dockerImageName: derper
             branchName: main
+            platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386
           - enable: true
             gitclone: true
             userName: vvbbnn00
             repoName: WARP-Clash-API
             dockerImageName: warp-clash-api
             branchName: master
+            platforms: linux/amd64,linux/arm64
     steps:
       - name: Checkout
         if: ${{ matrix.enable }} 
@@ -109,7 +112,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:${{ env.commit_short }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platforms }}
       - name: Commit Tag
         if: ${{ env.commit && matrix.enable }} 
         run: |
