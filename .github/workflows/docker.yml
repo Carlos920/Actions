@@ -109,7 +109,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:latest
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.dockerImageName }}:${{ env.commit_short }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386
+          platforms: linux/amd64,linux/arm64
       - name: Commit Tag
         if: ${{ env.commit && matrix.enable }} 
         run: |
