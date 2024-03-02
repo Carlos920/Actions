@@ -22,6 +22,9 @@ LABEL name="WARP-Clash-API"
 COPY --from=builder-image /usr/local/bin /usr/local/bin
 COPY --from=builder-image /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
+RUN apk add --no-cache bash \
+    && rm -rf /var/cache/apk/*
+
 WORKDIR /app
 
 # Copy the rest of the code
