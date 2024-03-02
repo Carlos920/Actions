@@ -44,7 +44,7 @@ jobs:
             dockerImageName: warp-clash-api
             branchName: master
             platforms: linux/amd64,linux/arm64
-          - enable: false
+          - enable: true
             gitclone: true
             userName: jhao104
             repoName: proxy_pool
