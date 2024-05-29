@@ -61,9 +61,9 @@ jobs:
       - name: Check New Commit
         if: ${{ matrix.enable }} 
         run: |
-          commit=$(curl -sL https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}/commits/${{ matrix.branchName }} |grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
+          commit=$(curl -sL https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}/commits/${{ matrix.branchName }} | grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" | head -1 | cut -d\/ -f5)
           wget -O ${{ github.workspace }}/README.md https://github.com/${{ github.repository }}/blob/docker/README.md?raw=true
-          lastCommit=$(grep "${{ matrix.userName }}\/${{ matrix.repoName }}" ${{ github.workspace }}/README.md |grep -o '[a-z0-9]\{40\}')
+          lastCommit=$(grep "${{ matrix.userName }}\/${{ matrix.repoName }}" ${{ github.workspace }}/README.md | grep -o '[a-z0-9]\{40\}')
           if [ "$commit" != "$lastCommit" ] || [ "${{ inputs.rebuild }}" == "true" ]; then
             echo "commit=$commit" >> $GITHUB_ENV
             echo "lastCommit=$lastCommit" >> $GITHUB_ENV
