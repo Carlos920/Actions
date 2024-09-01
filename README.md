@@ -5,7 +5,7 @@
     <summary>更新内容</summary>
 
 - [QiuChenlyOpenSource/QQFlacMusicDownloader](https://github.com/QiuChenlyOpenSource/QQFlacMusicDownloader) (Updated: deb5f564e8c2371ff3a5b5ee0d1de1cc95736e82)
-- [tailscale/tailscale](https://github.com/tailscale/tailscale) (Updated: b78df4d48ab81e211650d33fcbdaecb7b6f6b87d)
+- [tailscale/tailscale](https://github.com/tailscale/tailscale) (Updated: 65fe0ba7b50928eff53e2750ff2d583e4a33eb7e)
 - [vvbbnn00/WARP-Clash-API](https://github.com/vvbbnn00/WARP-Clash-API) (Updated: c7bf2360073959861219b422e51ae86411051b46)
 - [jhao104/proxy_pool](https://github.com/jhao104/proxy_pool) (Updated: bb16a6f849f660692fd5ee9947be32fba8dc1bd9)
 
