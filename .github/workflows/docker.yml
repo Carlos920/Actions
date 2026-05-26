@@ -37,7 +37,7 @@ jobs:
             dockerImageName: derper
             branchName: main
             platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386
-          - enable: true
+          - enable: false
             gitclone: true
             userName: vvbbnn00
             repoName: WARP-Clash-API
